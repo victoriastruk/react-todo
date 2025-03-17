@@ -1,0 +1,59 @@
+.modalOverlay
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background: rgba(0, 0, 0, 0.5)
+    display: flex
+    justify-content: center
+    align-items: center
+    z-index: 1000
+    .modal
+        display: flex
+        flex-direction: column
+        background: #fff
+        width: 500px
+        height: 250px
+        padding: 40px
+        border-radius: 15px
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3)
+        text-align: center
+        position: relative
+        .title
+            text-transform: uppercase
+            font-size: 1.5rem
+            padding-bottom: 1.25rem
+            font-weight: 500
+        input
+            padding: .625rem .5rem
+            font-size: 1.125rem
+            border-radius: .3125rem
+            border: 2px solid #6c63ff
+            outline: none
+        input::placeholder 
+            color: #C3C1E5
+        .modalButtons 
+            display: flex
+            justify-content: space-between
+            margin-top: auto
+            .btnCancel
+                padding: 10px 22px
+                border: 2px solid #6c63ff
+                border-radius: .3125rem
+                text-transform: uppercase
+                color: #6c63ff
+                font-size: 1.125rem
+                font-weight: 900
+                background-color: transparent
+                cursor: pointer
+            .btnApply
+                padding: 10px 22px
+                border: 2px solid #6c63ff
+                border-radius: .3125rem
+                text-transform: uppercase
+                color: #fff
+                font-size: 1.125rem
+                font-weight: 900
+                background-color: #6c63ff
+                cursor: pointer
