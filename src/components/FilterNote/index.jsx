@@ -1,21 +1,27 @@
 import ThemeNote from "../ThemeNote";
-
+import { useState } from "react";
+import { Search } from "lucide-react";
 import styles from "./FilterNote.module.sass";
+import Dropdown from "../DropDown";
 
-function FilterNote() {
+function FilterNote({setSearch}) {
+  const [focus, setFocus] = useState(false);
+ 
   return (
-    <div className={styles.filterContainer}>
-      <input
-        className={styles.input}
-        type="search"
-        placeholder="Search note..."
-      />
-      <select name="selectedFruit" defaultValue="ALL">
-        <option value="ALL">All</option>
-        <option value="Complete">Complete</option>
-        <option value="Incomplete">Incomplete</option>
-      </select>
-      <ThemeNote/>
+    <div className={styles.container}>
+      <div className={`${styles.inputWrapper} ${focus ? styles.focused : ""}`}>
+        <input
+          type="text"
+          placeholder="Search note..."
+          className={styles.input}
+          onChange={(e) => setSearch(e.target.value)}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+        />
+        <Search className={styles.icon} />
+      </div>
+      <Dropdown />
+      <ThemeNote />
     </div>
   );
 }
