@@ -1,8 +1,8 @@
 import { useState } from "react";
 import AddNewNoteModal from "../AddNewNoteModal";
-import styles from "./BtnPlus.module.sass";
+import styles from "./AddTaskButton.module.sass";
 
-function BtnPlus({ onAdd }) {
+function AddTaskButton({ onAdd }) {
   const [isModal, setIsModal] = useState(false);
 
   const handleAddNote = () => {
@@ -21,4 +21,4 @@ function BtnPlus({ onAdd }) {
   );
 }
 
-export default BtnPlus;
+export default AddTaskButton;

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Trash2, Pencil, Check } from "lucide-react";
-import BtnPlus from "../BtnPlus";
+import AddTaskButton from "../AddTaskButton";
 import detectiveImg from "./Detective.png";
 import styles from "./NoteList.module.sass";
 
-function NoteList({ search }) {
+function NoteList({ search, selectedFilter }) {
   const [notes, setNotes] = useState([]);
   const [completed, setCompleted] = useState({});
-  const [editNote, setEditNote] = useState(null); 
-  const [editText, setEditText] = useState(""); 
+  const [editNote, setEditNote] = useState(null);
+  const [editText, setEditText] = useState("");
 
   const handleAddNote = (note) => {
     if (note.trim() !== "" && !notes.includes(note)) {
@@ -48,12 +48,16 @@ function NoteList({ search }) {
       delete updatedCompleted[editNote];
       return updatedCompleted;
     });
-    setEditNote(null); 
+    setEditNote(null);
   };
 
-  const filteredNotes = notes.filter((note) =>
-    note.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredNotes = notes
+    .filter((note) => note.toLowerCase().includes(search.toLowerCase()))
+    .filter((note) => {
+      if (selectedFilter === "Complete") return completed[note];
+      if (selectedFilter === "Incomplete") return !completed[note];
+      return true;
+    });
 
   return (
     <>
@@ -61,11 +65,11 @@ function NoteList({ search }) {
         <div>
           <img className={styles.img} src={detectiveImg} alt="Detective" />
           <h2 className={styles.title}>Empty...</h2>
-          <BtnPlus onAdd={handleAddNote} />
+          <AddTaskButton onAdd={handleAddNote} />
         </div>
       ) : (
         <>
-          <BtnPlus onAdd={handleAddNote} />
+          <AddTaskButton onAdd={handleAddNote} />
           <ul className={styles.noteList}>
             {filteredNotes.length > 0 ? (
               filteredNotes.map((note, index) => (

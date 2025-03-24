@@ -1,12 +1,12 @@
-import ThemeNote from "../ThemeNote";
+import ThemeToggle from "../ThemeToggle";
 import { useState } from "react";
 import { Search } from "lucide-react";
 import styles from "./FilterNote.module.sass";
 import Dropdown from "../DropDown";
 
-function FilterNote({setSearch}) {
+function FilterNote({ setSearch, selectedFilter, setSelectedFilter }) {
   const [focus, setFocus] = useState(false);
- 
+
   return (
     <div className={styles.container}>
       <div className={`${styles.inputWrapper} ${focus ? styles.focused : ""}`}>
@@ -20,8 +20,8 @@ function FilterNote({setSearch}) {
         />
         <Search className={styles.icon} />
       </div>
-      <Dropdown />
-      <ThemeNote />
+      <Dropdown selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
+      <ThemeToggle />
     </div>
   );
 }
