@@ -86,3 +86,7 @@ body{
   color: var(--text);
   transition: background-color 0.3s, color 0.3s;
 }
+
+.input-dark{
+	border: 5px dotted pink;
+}
