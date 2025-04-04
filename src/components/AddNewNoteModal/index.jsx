@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styles from "./AddNewNoteModal.module.sass";
 import * as yup from "yup";
+import { ThemeContext } from "../../contexts/themeContext";
 
 function AddNewNoteModal({ onAdd, setIsModal }) {
+  const { theme } = useContext(ThemeContext);
   const [newNote, setNewNote] = useState("");
   const [error, setError] = useState("");
 
@@ -34,7 +36,7 @@ function AddNewNoteModal({ onAdd, setIsModal }) {
   return (
     <>
       <form className={styles.modalOverlay} onSubmit={addNewNote}>
-        <div className={styles.modal}>
+        <div className={theme === "light" ? styles.modal : styles.modalDark}>
           <label className={styles.title} htmlFor="note">
             New Note
           </label>

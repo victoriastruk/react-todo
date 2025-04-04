@@ -17,7 +17,18 @@
   &.focused
     border-color: #6c63ff
     box-shadow: 0px 0px 10px 2px rgba(108, 99, 255, 0.5) 
+.inputWrapperDark
+  display: flex
+  align-items: center
+  border: 1px solid #fff
+  border-radius: 10px
+  padding: 10px 15px
+  width: 80vw
+  transition: border-color 0.3s ease
 
+  &.focused
+    border-color: #fff
+    box-shadow: 0px 0px 10px 2px rgba(167, 167, 179, 0.5) 
 .input
   border: none
   outline: none
@@ -26,10 +37,19 @@
   width: 100%
   background-color: transparent
 
+.inputDark
+  border: none
+  outline: none
+  color: #666666
+  font-size: 18px
+  width: 100%
+  background-color: transparent
 .icon
   color: #6c63ff
   cursor: pointer
-
+.iconDark
+  color: #fff
+  cursor: pointer
 select 
   border: 1px solid #6c63ff
   outline: none

@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Trash2, Pencil, Check } from "lucide-react";
 import * as yup from "yup";
 import AddTaskButton from "../AddTaskButton";
+import detectiveDarkImg from "./Detective-dark.png";
 import detectiveImg from "./Detective.png";
 import styles from "./NoteList.module.sass";
+import { ThemeContext } from "../../contexts/themeContext";
 
 function NoteList({ search, selectedFilter }) {
+  const { theme } = useContext(ThemeContext);
   const [notes, setNotes] = useState([]);
   const [completed, setCompleted] = useState({});
   const [editNote, setEditNote] = useState(null);
@@ -82,7 +85,11 @@ function NoteList({ search, selectedFilter }) {
     <>
       {notes.length === 0 ? (
         <div>
-          <img className={styles.img} src={detectiveImg} alt="Detective" />
+          <img
+            className={styles.img}
+            src={theme === "light" ? detectiveImg : detectiveDarkImg}
+            alt="Detective"
+          />
           <h2 className={styles.title}>Empty...</h2>
           <AddTaskButton onAdd={handleAddNote} />
         </div>
@@ -93,7 +100,9 @@ function NoteList({ search, selectedFilter }) {
             {filteredNotes.length > 0 ? (
               filteredNotes.map((note, index) => (
                 <li className={styles.noteItem} key={index}>
-                  {error && <p className="error">{error}</p>}
+                  {editNote === note && error && (
+                    <p className="error">{error}</p>
+                  )}
                   <div className={styles.noteItemWrap}>
                     {editNote === note ? (
                       <>
