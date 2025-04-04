@@ -10,6 +10,7 @@ function NoteList({ search, selectedFilter }) {
   const [completed, setCompleted] = useState({});
   const [editNote, setEditNote] = useState(null);
   const [editText, setEditText] = useState("");
+  const [error, setError] = useState("");
 
   const noteUpdateSchema = yup.object({
     note: yup
@@ -62,10 +63,10 @@ function NoteList({ search, selectedFilter }) {
           return updatedCompleted;
         });
         setEditNote(null);
+        setError("");
       })
       .catch((e) => {
-        setEditNote(null);
-        console.log(e);
+        setError(e.message);
       });
   };
 
@@ -92,14 +93,26 @@ function NoteList({ search, selectedFilter }) {
             {filteredNotes.length > 0 ? (
               filteredNotes.map((note, index) => (
                 <li className={styles.noteItem} key={index}>
+                  {error && <p className="error">{error}</p>}
                   <div className={styles.noteItemWrap}>
                     {editNote === note ? (
-                      <input
-                        type="text"
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                        className={styles.editInput}
-                      />
+                      <>
+                        <input
+                          type="text"
+                          value={editText}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setEditText(value);
+                            noteUpdateSchema
+                              .validate({ note: value })
+                              .then(() => setError(""))
+                              .catch((e) => setError(e.message));
+                          }}
+                          className={`${styles.editInput} ${
+                            error ? styles.inputError : ""
+                          }`}
+                        />
+                      </>
                     ) : (
                       <div className={styles.noteItemText}>
                         <input
@@ -118,7 +131,9 @@ function NoteList({ search, selectedFilter }) {
                     <div className={styles.icons}>
                       {editNote === note ? (
                         <Check
-                          className={styles.check}
+                          className={`${styles.check} ${
+                            error ? styles.disabled : ""
+                          }`}
                           onClick={handleSaveEdit}
                         />
                       ) : (

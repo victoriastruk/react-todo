@@ -1,8 +1,10 @@
 import { useState } from "react";
 import styles from "./AddNewNoteModal.module.sass";
 import * as yup from "yup";
+
 function AddNewNoteModal({ onAdd, setIsModal }) {
   const [newNote, setNewNote] = useState("");
+  const [error, setError] = useState("");
 
   const noteSchema = yup.object({
     note: yup
@@ -22,7 +24,7 @@ function AddNewNoteModal({ onAdd, setIsModal }) {
         setNewNote("");
         setIsModal(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => setError(e.message));
   };
 
   const handleCancel = () => {
@@ -42,8 +44,19 @@ function AddNewNoteModal({ onAdd, setIsModal }) {
             name="note"
             id="note"
             value={newNote}
-            onChange={(e) => setNewNote(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setNewNote(value);
+              noteSchema
+                .validate({ note: value })
+                .then(() => {
+                  setError("");
+                })
+                .catch((e) => setError(e.message));
+            }}
+            className={error ? styles.inputError : ""}
           />
+          {error && <p className="error">{error}</p>}
           <div className={styles.modalButtons}>
             <button className={styles.btnCancel} onClick={handleCancel}>
               Cancel
