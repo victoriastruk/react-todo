@@ -1,14 +1,28 @@
 import { useState } from "react";
 import styles from "./AddNewNoteModal.module.sass";
-
+import * as yup from "yup";
 function AddNewNoteModal({ onAdd, setIsModal }) {
   const [newNote, setNewNote] = useState("");
 
+  const noteSchema = yup.object({
+    note: yup
+      .string()
+      .required("Is required")
+      .min(3, "Must be at least 3 characters long")
+      .max(50, "Must be at most 50 characters long ")
+      .trim(),
+  });
+
   const addNewNote = (e) => {
     e.preventDefault();
-    if (newNote.trim() !== "") onAdd(newNote);
-    setNewNote("");
-    setIsModal(false);
+    noteSchema
+      .validate({ note: newNote })
+      .then(() => {
+        onAdd(newNote);
+        setNewNote("");
+        setIsModal(false);
+      })
+      .catch((e) => console.log(e));
   };
 
   const handleCancel = () => {

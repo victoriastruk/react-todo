@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Trash2, Pencil, Check } from "lucide-react";
+import * as yup from "yup";
 import AddTaskButton from "../AddTaskButton";
 import detectiveImg from "./Detective.png";
 import styles from "./NoteList.module.sass";
@@ -9,6 +10,15 @@ function NoteList({ search, selectedFilter }) {
   const [completed, setCompleted] = useState({});
   const [editNote, setEditNote] = useState(null);
   const [editText, setEditText] = useState("");
+
+  const noteUpdateSchema = yup.object({
+    note: yup
+      .string()
+      .required("Is required")
+      .min(3, "Must be at least 3 characters long")
+      .max(50, "Must be at most 50 characters long ")
+      .trim(),
+  });
 
   const handleAddNote = (note) => {
     if (note.trim() !== "" && !notes.includes(note)) {
@@ -39,16 +49,24 @@ function NoteList({ search, selectedFilter }) {
   };
 
   const handleSaveEdit = () => {
-    setNotes((prevNotes) =>
-      prevNotes.map((note) => (note === editNote ? editText : note))
-    );
-    setCompleted((prev) => {
-      const updatedCompleted = { ...prev };
-      updatedCompleted[editText] = updatedCompleted[editNote];
-      delete updatedCompleted[editNote];
-      return updatedCompleted;
-    });
-    setEditNote(null);
+    noteUpdateSchema
+      .validate({ note: editText })
+      .then(() => {
+        setNotes((prevNotes) =>
+          prevNotes.map((note) => (note === editNote ? editText : note))
+        );
+        setCompleted((prev) => {
+          const updatedCompleted = { ...prev };
+          updatedCompleted[editText] = updatedCompleted[editNote];
+          delete updatedCompleted[editNote];
+          return updatedCompleted;
+        });
+        setEditNote(null);
+      })
+      .catch((e) => {
+        setEditNote(null);
+        console.log(e);
+      });
   };
 
   const filteredNotes = notes
@@ -99,11 +117,20 @@ function NoteList({ search, selectedFilter }) {
                     )}
                     <div className={styles.icons}>
                       {editNote === note ? (
-                        <Check className={styles.check} onClick={handleSaveEdit} />
+                        <Check
+                          className={styles.check}
+                          onClick={handleSaveEdit}
+                        />
                       ) : (
-                        <Pencil className={styles.pencil} onClick={() => handleEditNote(note)} />
+                        <Pencil
+                          className={styles.pencil}
+                          onClick={() => handleEditNote(note)}
+                        />
                       )}
-                      <Trash2 className={styles.trash} onClick={() => handleDelNote(note)} />
+                      <Trash2
+                        className={styles.trash}
+                        onClick={() => handleDelNote(note)}
+                      />
                     </div>
                   </div>
                   <hr />
