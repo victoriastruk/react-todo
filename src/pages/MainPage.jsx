@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ThemeContext } from "../contexts/themeContext";
 import MainTitle from "../components/MainTitile";
 import FilterNote from "../components/FilterNote";
 import NoteList from "../components/NoteList";
