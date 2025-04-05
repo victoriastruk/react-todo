@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { ThemeContext } from "./contexts/themeContext";
+import CONSTANTS from "./constansts";
 import MainPage from "./pages/MainPage";
 
 function App() {
-  const [theme, setTheme] = useState("light");
+  const { LIGHT } = CONSTANTS.THEME;
+  const [theme, setTheme] = useState(LIGHT);
   useEffect(() => {
     document.body.className = theme;
   }, [theme]);

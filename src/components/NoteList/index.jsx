@@ -1,13 +1,18 @@
 import { useContext, useState } from "react";
+import classNames from "classnames";
 import { Trash2, Pencil, Check } from "lucide-react";
-import * as yup from "yup";
+import { NOTE_VALIDATION_SCHEMA } from "../../utils/validate/validationSchemas";
+import CONSTANTS from "../../constansts";
+import { ThemeContext } from "../../contexts/themeContext";
 import AddTaskButton from "../AddTaskButton";
+
 import detectiveDarkImg from "./Detective-dark.png";
 import detectiveImg from "./Detective.png";
+
 import styles from "./NoteList.module.sass";
-import { ThemeContext } from "../../contexts/themeContext";
 
 function NoteList({ search, selectedFilter }) {
+  const { LIGHT } = CONSTANTS.THEME;
   const { theme } = useContext(ThemeContext);
   const [notes, setNotes] = useState([]);
   const [completed, setCompleted] = useState({});
@@ -15,14 +20,11 @@ function NoteList({ search, selectedFilter }) {
   const [editText, setEditText] = useState("");
   const [error, setError] = useState("");
 
-  const noteUpdateSchema = yup.object({
-    note: yup
-      .string()
-      .required("Is required")
-      .min(3, "Must be at least 3 characters long")
-      .max(50, "Must be at most 50 characters long ")
-      .trim(),
+  const inputClassName = classNames(styles.editInput, {
+    [styles.inputError]: error,
   });
+
+  const checkClassName = classNames(styles.check, { [styles.disabled]: error });
 
   const handleAddNote = (note) => {
     if (note.trim() !== "" && !notes.includes(note)) {
@@ -52,9 +54,16 @@ function NoteList({ search, selectedFilter }) {
     setEditText(note);
   };
 
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setEditText(value);
+    NOTE_VALIDATION_SCHEMA.validate({ note: value })
+      .then(() => setError(""))
+      .catch((e) => setError(e.message));
+  };
+
   const handleSaveEdit = () => {
-    noteUpdateSchema
-      .validate({ note: editText })
+    NOTE_VALIDATION_SCHEMA.validate({ note: editText })
       .then(() => {
         setNotes((prevNotes) =>
           prevNotes.map((note) => (note === editNote ? editText : note))
@@ -87,7 +96,7 @@ function NoteList({ search, selectedFilter }) {
         <div>
           <img
             className={styles.img}
-            src={theme === "light" ? detectiveImg : detectiveDarkImg}
+            src={theme === LIGHT ? detectiveImg : detectiveDarkImg}
             alt="Detective"
           />
           <h2 className={styles.title}>Empty...</h2>
@@ -109,17 +118,8 @@ function NoteList({ search, selectedFilter }) {
                         <input
                           type="text"
                           value={editText}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setEditText(value);
-                            noteUpdateSchema
-                              .validate({ note: value })
-                              .then(() => setError(""))
-                              .catch((e) => setError(e.message));
-                          }}
-                          className={`${styles.editInput} ${
-                            error ? styles.inputError : ""
-                          }`}
+                          onChange={handleInputChange}
+                          className={inputClassName}
                         />
                       </>
                     ) : (
@@ -140,9 +140,7 @@ function NoteList({ search, selectedFilter }) {
                     <div className={styles.icons}>
                       {editNote === note ? (
                         <Check
-                          className={`${styles.check} ${
-                            error ? styles.disabled : ""
-                          }`}
+                          className={checkClassName}
                           onClick={handleSaveEdit}
                         />
                       ) : (

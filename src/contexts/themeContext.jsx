@@ -1,6 +1,9 @@
 import { createContext } from "react";
+import CONSTANTS from "../constansts";
+
+const { LIGHT } = CONSTANTS.THEME;
 
 export const ThemeContext = createContext({
-  theme: "light",
+  theme: LIGHT,
   setTheme: () => {},
 });

@@ -1,30 +1,40 @@
 import { useContext, useState } from "react";
-import styles from "./AddNewNoteModal.module.sass";
-import * as yup from "yup";
+import classNames from "classnames";
+import { NOTE_VALIDATION_SCHEMA } from "../../utils/validate/validationSchemas";
 import { ThemeContext } from "../../contexts/themeContext";
+import styles from "./AddNewNoteModal.module.sass";
+import CONSTANTS from "../../constansts";
 
 function AddNewNoteModal({ onAdd, setIsModal }) {
+  const { DARK } = CONSTANTS.THEME;
   const { theme } = useContext(ThemeContext);
   const [newNote, setNewNote] = useState("");
   const [error, setError] = useState("");
 
-  const noteSchema = yup.object({
-    note: yup
-      .string()
-      .required("Is required")
-      .min(3, "Must be at least 3 characters long")
-      .max(50, "Must be at most 50 characters long ")
-      .trim(),
+  const modalClassName = classNames(styles.modal, {
+    [styles.modalDark]: theme === DARK,
+  });
+  const inputClassName = classNames(styles.input, {
+    [styles.inputError]: error,
   });
 
   const addNewNote = (e) => {
     e.preventDefault();
-    noteSchema
-      .validate({ note: newNote })
+    NOTE_VALIDATION_SCHEMA.validate({ note: newNote })
       .then(() => {
         onAdd(newNote);
         setNewNote("");
         setIsModal(false);
+      })
+      .catch((e) => setError(e.message));
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setNewNote(value);
+    NOTE_VALIDATION_SCHEMA.validate({ note: value })
+      .then(() => {
+        setError("");
       })
       .catch((e) => setError(e.message));
   };
@@ -36,7 +46,7 @@ function AddNewNoteModal({ onAdd, setIsModal }) {
   return (
     <>
       <form className={styles.modalOverlay} onSubmit={addNewNote}>
-        <div className={theme === "light" ? styles.modal : styles.modalDark}>
+        <div className={modalClassName}>
           <label className={styles.title} htmlFor="note">
             New Note
           </label>
@@ -46,17 +56,8 @@ function AddNewNoteModal({ onAdd, setIsModal }) {
             name="note"
             id="note"
             value={newNote}
-            onChange={(e) => {
-              const value = e.target.value;
-              setNewNote(value);
-              noteSchema
-                .validate({ note: value })
-                .then(() => {
-                  setError("");
-                })
-                .catch((e) => setError(e.message));
-            }}
-            className={error ? styles.inputError : ""}
+            onChange={handleInputChange}
+            className={inputClassName}
           />
           {error && <p className="error">{error}</p>}
           <div className={styles.modalButtons}>
