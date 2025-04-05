@@ -10,6 +10,7 @@ A simple TODO list application built with **React** and **SASS**, allowing users
 - Light and dark theme toggle
 - Input validation using **Yup**
 - Error messages and styling based on validation
+- Theme is saved in **localStorage** and persists across page reloads
 - Responsive design
 
 > ⚠️ Note: This app uses React `useState` for state management and does not persist tasks after a page reload.
@@ -18,6 +19,7 @@ A simple TODO list application built with **React** and **SASS**, allowing users
 
 - [Vite](https://vite.dev/)
 - [React](https://reactjs.org/)
+- [classnames](https://www.npmjs.com/package/classnames) for cleaner dynamic class handling
 - [Yup](https://github.com/jquense/yup) for form validation
 - [SASS](https://sass-lang.com/)
 - [Lucide Icons](https://lucide.dev/) for UI icons
@@ -58,6 +60,7 @@ npm run dev
 react-todo/
 ├── eslint.config.js
 ├── index.html
+├── LICENSE
 ├── package.json
 ├── package-lock.json
 ├── public
@@ -104,19 +107,22 @@ react-todo/
 │   │   └── ThemeToggleBtn
 │   │       ├── index.jsx
 │   │       └── ThemeToggle.module.sass
+│   ├── constansts.js
 │   ├── contexts
-│   │   └── themeContext.jsx
+│   │   ├── themeContext.jsx
+│   │   └── themeProvider.jsx
 │   ├── index.css
 │   ├── main.jsx
-│   └── pages
-│       └── MainPage.jsx
+│   ├── pages
+│   │   └── MainPage.jsx
+│   └── utils
+│       └── validate
+│           └── validationSchemas.js
 └── vite.config.js
 ```
 
 ## 📌 To Improve
 
-- Use `classnames` for cleaner dynamic class handling
-- Save tasks using `localStorage`
 - Add animations or drag-and-drop functionality
 
 ## 📜 License
