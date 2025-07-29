@@ -1,11 +1,38 @@
+.detectiveWrapper
+  position: relative
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 200px
+  margin: 0 auto
+  animation: swing 3s infinite ease-in-out
+
+.detectiveWrapper::after
+  content: ''
+  position: absolute
+  bottom: -15px
+  left: 20px
+  width: 100px
+  height: 10px
+  background: radial-gradient(ellipse at center, #b8b6f8 0%, transparent 80%)
+  animation: glow 2s infinite ease-in-out
+
+@keyframes glow
+  0%, 100%
+    opacity: 0.2
+  50%
+    opacity: 0.6
 .img
-    display: block
-    margin: 10px auto
+  width: 200px
+  height: auto
+  pointer-events: none
 
 .title
     text-align: center
     font-weight: 400
     font-size: 1.25rem
+    margin-top: 20px
+
 .noteItemWrap
     display: flex
     align-items: center

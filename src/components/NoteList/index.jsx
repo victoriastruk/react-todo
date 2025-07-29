@@ -94,11 +94,13 @@ function NoteList({ search, selectedFilter }) {
     <>
       {notes.length === 0 ? (
         <div>
-          <img
-            className={styles.img}
-            src={theme === LIGHT ? detectiveImg : detectiveDarkImg}
-            alt="Detective"
-          />
+          <div className={styles.detectiveWrapper}>
+            <img
+              className={styles.img}
+              src={theme === LIGHT ? detectiveImg : detectiveDarkImg}
+              alt="Detective"
+            />
+          </div>
           <h2 className={styles.title}>Empty...</h2>
           <AddTaskButton onAdd={handleAddNote} />
         </div>

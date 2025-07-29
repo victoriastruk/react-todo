@@ -147,7 +147,7 @@ body {
   min-height: 100vh;
 }
 :root {
-  --background-light: #ffffff;
+  --background-light: #f0f0ff;
   --text-light: #333;
   --background-dark: #252525;
   --text-dark: #f5f5f5;
@@ -165,6 +165,12 @@ body {
   color: rgb(233, 113, 113);
   text-transform: none;
 }
+
+body.LIGHT {
+  background: var(--background-light);
+  color: var(--text-light);
+}
+
 body.DARK {
   background: var(--background-dark);
   color: var(--text-dark);
